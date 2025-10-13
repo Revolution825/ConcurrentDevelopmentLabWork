@@ -17,7 +17,7 @@
 // Author: Joseph Kehoe
 // Created: 21/10/24
 // Modifeid by: Diarmuid O'Neill
-//GPL Licence
+// Modified: 13/10/2025
 
 package main
 

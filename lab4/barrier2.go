@@ -20,10 +20,6 @@
 // Modified by: Diarmuid O'Neill (C00282898@setu.ie)
 // Description:
 // A simple barrier implemented using mutex and unbuffered channel
-// Issues:
-// None I hope
-//1. Change mutex to atomic variable
-//2. Make it a reusable barrier
 //--------------------------------------------
 
 package main

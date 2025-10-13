@@ -1,2 +1,2 @@
-# ConcurrentDevelopmentLabWork
-Code for concurrent development module in college
+# lab1
+This lab demonstrates the basics of GO.
