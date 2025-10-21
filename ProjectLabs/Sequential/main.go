@@ -4,7 +4,6 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
-	"sync"
 
 	"github.com/hajimehoshi/ebiten"
 )
@@ -20,30 +19,8 @@ var buffer [width][height]uint8 = [width][height]uint8{}
 var count int = 0
 
 func update() error {
-	var wg sync.WaitGroup
-	jobs := make(chan int, 1000)
-
-	for worker := 1; worker <= 1; worker++ { // Creates 4 workers
-		wg.Add(1)
-		go concurrentUpdate(jobs, &wg)
-	}
 	for x := 1; x < width-1; x++ {
-		jobs <- x
-	}
-	close(jobs)
-
-	wg.Wait()
-	temp := buffer
-	buffer = grid
-	grid = temp
-	return nil
-}
-
-func concurrentUpdate(jobs <-chan int, wg *sync.WaitGroup) error {
-	defer wg.Done()
-	for job := range jobs {
-		x := job
-		for y := 1; y < height-1; y++ { // Sends jobs to workers
+		for y := 1; y < height-1; y++ {
 			buffer[x][y] = 0
 			n := grid[x-1][y-1] + grid[x-1][y+0] + grid[x-1][y+1] + grid[x+0][y-1] + grid[x+0][y+1] + grid[x+1][y-1] + grid[x+1][y+0] + grid[x+1][y+1]
 
@@ -56,6 +33,10 @@ func concurrentUpdate(jobs <-chan int, wg *sync.WaitGroup) error {
 			}
 		}
 	}
+
+	temp := buffer
+	buffer = grid
+	grid = temp
 	return nil
 }
 
