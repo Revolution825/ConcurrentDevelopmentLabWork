@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Modified By: Diarmuid O'Neill (C00282898@setu.ie)
+// This code implements the Game of Life concurrently
 
 package main
 
@@ -38,13 +39,13 @@ var count int = 0
 
 func update() error {
 	var wg sync.WaitGroup
-	jobs := make(chan int, 1000)
+	jobs := make(chan int, 1600)
 
-	for worker := 1; worker <= 1; worker++ { // Creates 4 workers
+	for worker := 1; worker <= 4; worker++ { // Creates 4 workers
 		wg.Add(1)
 		go concurrentUpdate(jobs, &wg)
 	}
-	for x := 1; x < width-1; x++ {
+	for x := 1; x < width-1; x++ { // Sends jobs to workers
 		jobs <- x
 	}
 	close(jobs)

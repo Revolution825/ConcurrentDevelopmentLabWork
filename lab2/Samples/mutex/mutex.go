@@ -14,40 +14,46 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Author: Diarmuid O'Neill (C00282898@setu.ie)
-// Example of worker pool using channels and go routines
+// This program demonstrates the use of mutexes in Go to safely
 
 package main
 
 import (
 	"fmt"
+	"sync"
 )
 
+// Global variables shared between functions --A BAD IDEA
+var wg sync.WaitGroup
+var total int64
+
+func adds(n int, theLock *sync.Mutex) bool {
+	for i := 0; i < n; i++ {
+		theLock.Lock()
+		total++
+		theLock.Unlock()
+	}
+	wg.Done() //let waitgroup know we have finished
+	return true
+}
+
 func main() {
-	jobs := make(chan int, 100) // creates channel with a buffer of 100
-	results := make(chan int, 100)
 
-	go worker(jobs, results) // creates a worker
+	//theLock will be passed by reference between go routines
+	//better than using a global variable
+	var theLock sync.Mutex
 
-	for i := 0; i < 100; i++ {
-		jobs <- i
+	total = 0
+	//the waitgroup is used as a barrier
+	// init it to number of go routines
+	wg.Add(10)
+
+	//for loop using range option
+	for i := range 10 {
+		//starting
+		fmt.Println(i)
+		go adds(1000, &theLock)
 	}
-	close(jobs)
-
-	for j := 0; j < 100; j++ {
-		fmt.Println(<-results)
-	}
-}
-
-func worker(jobs <-chan int, results chan<- int) { // jobs only send, results only receives
-	for n := range jobs {
-		results <- fib(n)
-	}
-}
-
-func fib(n int) int {
-	if n <= 1 {
-		return n
-	}
-
-	return fib(n-1) + fib(n-2)
+	wg.Wait() //wait here until everyone (10 go routines) is done
+	fmt.Println(total)
 }

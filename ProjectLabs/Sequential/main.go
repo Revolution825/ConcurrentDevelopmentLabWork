@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Modified By: Diarmuid O'Neill (C00282898@setu.ie)
+// This code implements the Game of Life sequentially
 
 package main
 

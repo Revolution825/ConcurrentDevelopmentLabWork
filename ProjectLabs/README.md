@@ -1,0 +1,3 @@
+# ProjectLabs
+This lab shows a sequential and concurrent implementation of The Game of Life. Basic implementation elements include a main function as the main entry point, a frame function to handle updating and drawing to the screen, the update function handles all the logic and rules and the display function draws everything to the screen.
+For concurrent implementation, create a number of workers and send jobs to available workers using a channel. In this concurrent implementation each worker handles a column of the grid.

@@ -18,6 +18,7 @@
 // Created: 21/10/24
 // Modifeid by: Diarmuid O'Neill
 // Modified: 13/10/2025
+// This code implements the dining philosophers problem using channels to represent forks
 
 package main
 

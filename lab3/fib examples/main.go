@@ -18,8 +18,7 @@
 // Author: Joseph Kehoe (Joseph.Kehoe@setu.ie)
 // Created on 30/9/2024
 // Modified by: Diarmuid O'Neill (C00282898@setu.ie)
-// Description:
-// Fibonacci sequence exasmple implemented using a channel
+// This code implements a fibonacci sequence using a channel
 //--------------------------------------------
 
 package main

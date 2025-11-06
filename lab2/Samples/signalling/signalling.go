@@ -14,40 +14,43 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Author: Diarmuid O'Neill (C00282898@setu.ie)
-// Example of worker pool using channels and go routines
+// This program demonstrates the use of signalling between goroutines in Go.
 
 package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
+//Global variables shared between functions --A BAD IDEA
+
 func main() {
-	jobs := make(chan int, 100) // creates channel with a buffer of 100
-	results := make(chan int, 100)
+	var wg sync.WaitGroup
+	barrier := make(chan bool)
 
-	go worker(jobs, results) // creates a worker
-
-	for i := 0; i < 100; i++ {
-		jobs <- i
+	doStuffOne := func() bool {
+		fmt.Println("StuffOne - Part A")
+		//wait here
+		barrier <- true
+		fmt.Println("StuffOne - PartB")
+		wg.Done()
+		return true
 	}
-	close(jobs)
+	doStuffTwo := func() bool {
+		time.Sleep(time.Second * 5)
+		fmt.Println("StuffTwo - Part A")
+		//wait here
 
-	for j := 0; j < 100; j++ {
-		fmt.Println(<-results)
+		<-barrier
+		fmt.Println("StuffTwo - PartB")
+		wg.Done()
+		return true
 	}
-}
+	wg.Add(2)
+	go doStuffOne()
+	go doStuffTwo()
+	wg.Wait() //wait here until everyone (10 go routines) is done
 
-func worker(jobs <-chan int, results chan<- int) { // jobs only send, results only receives
-	for n := range jobs {
-		results <- fib(n)
-	}
-}
-
-func fib(n int) int {
-	if n <= 1 {
-		return n
-	}
-
-	return fib(n-1) + fib(n-2)
 }

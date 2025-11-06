@@ -18,6 +18,7 @@
 // Author: Joseph Kehoe (Joseph.Kehoe@setu.ie)
 // Created on 30/9/2024
 // Modified by: Diarmuid O'Neill (C00282898@setu.ie)
+// This code implements a barrier using go routines, mutex's and semaphores
 //--------------------------------------------
 
 package main
